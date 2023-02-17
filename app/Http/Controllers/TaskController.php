@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Folder;
-use App\Models\Task;
-use Illuminate\Http\Request;
 use App\Http\Requests\CreateTask;
 use App\Http\Requests\EditTask;
+use App\Models\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
@@ -21,18 +21,9 @@ class TaskController extends Controller
         // ユーザーのフォルダを取得する
         $folders = Auth::user()->folders()->get();
 
-        // 選ばれたフォルダを取得する
-        // $current_folder = Folder::find($id);
-
-        // [$current_folder] がなければ [404]エラーの表示
-        // if (is_null($current_folder)) {
-        //     abort(404);
-        // }
-
         // 選ばれたフォルダに紐づくタスクを取得する
-        // $tasks = $current_folder->tasks()->get();
         $tasks = $folder->tasks()->get();        
-
+        
         return view('tasks/index', [
             'folders' => $folders,
             'current_folder_id' => $folder->id,
@@ -48,7 +39,7 @@ class TaskController extends Controller
     public function showCreateForm(Folder $folder)
     {
         return view('tasks/create', [
-            'folder_id' => $folder->id
+            'folder' => $folder
         ]);
     }    
     
@@ -67,7 +58,7 @@ class TaskController extends Controller
         $folder->tasks()->save($task);
 
         return redirect()->route('tasks.index', [
-            'id' => $folder->id,
+            'folder' => $folder->id,
         ]);
     }
 
@@ -103,10 +94,15 @@ class TaskController extends Controller
         $task->save();
 
         return redirect()->route('tasks.index', [
-            'id' => $task->folder_id,
+            'folder' => $task->folder_id,
         ]);
     }
-
+    
+    /**
+     * フォルダとタスクの関連性があるか調べる
+     * @param Folder $folder
+     * @param Task $task
+     */
     private function checkRelation(Folder $folder, Task $task)
     {
         if ($folder->id !== $task->folder_id) {
