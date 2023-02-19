@@ -11,6 +11,8 @@ jobs:
     name: Deploy to server
 
     runs-on: ubuntu-latest
+    runs:
+      using: 'node16'
 
     steps:
       - uses: actions/checkout@v2
