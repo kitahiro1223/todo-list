@@ -24,10 +24,6 @@
                                 <label for="password">パスワード</label>
                                 <input type="password" class="form-control" id="password" name="password" />
                             </div>
-                            <div class="form-group">
-                                <label>これは自動デプロイの確認です。</label>
-                                <input/>
-                            </div>
                             <div class="text-right">
                                 <button type="submit" class="btn btn-primary">送信</button>
                             </div>
